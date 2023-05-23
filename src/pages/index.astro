@@ -1,11 +1,55 @@
 ---
+import Course from "../components/Course.astro";
+import Post from "../components/Post.astro";
+import Product from "../components/Product.astro";
+import ReactComponent from "../components/ReactComponent";
 import Layout from "../layouts/Layout.astro";
+
+const productsUrl = `${import.meta.env.PUBLIC_API_URL}/products`;
+const blogUrl = `${import.meta.env.PUBLIC_API_URL}/blog`;
+
+const [productsRes, postsRes] = await Promise.all([
+  fetch(productsUrl),
+  fetch(blogUrl),
+]);
+
+const [productsFromApi, postsFromApi] = await Promise.all([
+  productsRes.json(),
+  postsRes.json(),
+]);
+
+const formatData = (data) => {
+  return data.map((d) => ({
+    ...d,
+    imageUrl: `${
+      import.meta.env.PUBLIC_CLOUDINARY_BASE_URL
+    }/v1680120548/GuitarLA/${d.url}.jpg`,
+  }));
+};
+
+const products = formatData(productsFromApi);
+const posts = formatData(postsFromApi);
+
+const courseImage = `${
+  import.meta.env.PUBLIC_CLOUDINARY_BASE_URL
+}/v1680120548/GuitarLA/cursos_bg_phjenp.jpg`;
 ---
 
 <Layout title="Inicio" description="Tienda de Instrumentos musicales">
   <main class="contenedor">
-    <h1 class="heading">Inicio</h1>
+    <h1 class="heading">Nuestra Colección</h1>
+
+    <div class="grid">
+      {products?.map((product) => <Product data={product} />)}
+    </div>
   </main>
+  <Course imageUrl={courseImage} />
+  <ReactComponent client:load />
+  <section class="contenedor">
+    <div class="grid">
+      {posts?.map((post) => <Post data={post} />)}
+    </div>
+  </section>
 </Layout>
 
 <style></style>
