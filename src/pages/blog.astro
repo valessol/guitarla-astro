@@ -1,10 +1,27 @@
 ---
+import Post from "../components/Post.astro";
 import Layout from "../layouts/Layout.astro";
+
+const apiUrl = `${import.meta.env.PUBLIC_API_URL}/blog`;
+const response = await fetch(apiUrl);
+const data = await response.json();
+const formatData = () => {
+  return data.map((d) => ({
+    ...d,
+    imageUrl: `${
+      import.meta.env.PUBLIC_CLOUDINARY_BASE_URL
+    }/v1680120548/GuitarLA/${d.url}.jpg`,
+  }));
+};
+const posts = formatData();
 ---
 
 <Layout title="Blog" description="Tienda de Instrumentos musicales">
   <main class="contenedor">
     <h1 class="heading">Blog</h1>
+    <div class="grid">
+      {posts?.map((post) => <Post data={post} />)}
+    </div>
   </main>
 </Layout>
 
