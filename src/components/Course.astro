@@ -1,0 +1,55 @@
+---
+export interface Props {
+  imageUrl: string;
+}
+const { imageUrl } = Astro.props;
+const backgroundImage = `url(${imageUrl})`;
+---
+
+<style define:vars={{ backgroundImage }}>
+  .curso {
+    background-image: linear-gradient(
+        to right,
+        rgb(0 0 0 /0.65),
+        rgb(0 0 0 / 0.85)
+      ),
+      var(--backgroundImage);
+  }
+</style>
+
+<section class="curso">
+  <div class="contenedor grid">
+    <div class="contenido">
+      <h2 class="heading">Cursos con hasta 30% de descuento</h2>
+      <p>
+        Latin words, consectetur, from a Lorem Ipsum passage, and going through
+        the cites of the word in classical literature, discovered the
+        undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33
+        of "de Finibus Bonorum et Malorum"
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .curso {
+    padding: 10rem 0;
+    margin-top: 10rem;
+    background-size: cover;
+    background-position: center center;
+  }
+  @media (min-width: 768px) {
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .contenido {
+      grid-column: 2 / 3;
+    }
+  }
+  .curso p {
+    text-align: center;
+    font-size: 2.4rem;
+    color: var(--white);
+  }
+</style>
